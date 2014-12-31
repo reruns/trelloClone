@@ -19,7 +19,6 @@ Trello.Views.BoardsIndex = Backbone.View.extend({
   events: {
     'click .new-board':'createBoard',
     'click .delete':'confirmDelete'
-    'click .really':'deleteBoard'
   },
 
   createBoard: function(event) {
@@ -28,7 +27,19 @@ Trello.Views.BoardsIndex = Backbone.View.extend({
   },
 
   confirmDelete: function(event) {
-    var $content = $('<p>Really delete?</p><button class="real">Really really</button>');
+    var $tar = $(event.target)
+    var $content = $('<div><p>Really delete?</p></div>');
+    $content.append('<button class="real">Really really</button>')
+    var id = $tar.data('board-id');
+    $content.bind('click', '.real', this.deleteBoard.bind(id));
     modal.open({content: $content});
+  },
+
+  deleteBoard: function(event) {
+    debugger;
+    event.preventDefault();
+    var board = Trello.boards.get(id);
+    board.destroy();
+    this.remove();
   }
 })
